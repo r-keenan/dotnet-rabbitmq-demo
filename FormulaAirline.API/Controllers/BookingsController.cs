@@ -1,3 +1,4 @@
+using System.Linq;
 using FormulaAirline.API.Models;
 using FormulaAirline.API.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -26,9 +27,23 @@ namespace FormulaAirline.API.Controllers
 
             _bookings.Add(newBooking);
 
+            try
+            {
+                
             _messageProducer.SendingMessages<Booking>(newBooking);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);    
+            }
 
             return Ok();
+        }
+
+        [HttpGet]
+        public IActionResult GetBookings()
+        {
+            return Ok(_bookings ?? []);
         }
     }
 }
